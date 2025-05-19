@@ -59,8 +59,6 @@ body {
 <body>
 
   <div class="wrapper">
-
-
     <!-- 三个按钮 -->
     <a id="btn1" class="btn" data-src="http://ai-hongse.oss-cn-nanjing.aliyuncs.com/%E6%B8%A1%E6%B1%9F%E6%88%98%E5%BD%B9%E7%BB%8F%E8%BF%87.mp4">
       (1)
@@ -83,13 +81,29 @@ body {
     const player  = document.getElementById('player');
     const videoEl = player.querySelector('video');
 
+    // 点击按钮，打开播放器
     buttons.forEach(btn => {
-      btn.addEventListener('click', () => {
+      btn.addEventListener('click', (e) => {
+        e.stopPropagation(); // 阻止冒泡到document，避免立即被关闭
         const src = btn.getAttribute('data-src');
         videoEl.src = src;
         player.style.display = 'block';
         videoEl.play();
       });
+    });
+
+    // 点击播放器区域，不关闭
+    player.addEventListener('click', (e) => {
+      e.stopPropagation();
+    });
+
+    // 点击空白处关闭播放器
+    document.addEventListener('click', () => {
+      if (player.style.display === 'block') {
+        videoEl.pause();
+        videoEl.src = '';
+        player.style.display = 'none';
+      }
     });
   </script>
 </body>
